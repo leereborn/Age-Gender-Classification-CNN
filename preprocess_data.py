@@ -8,15 +8,15 @@ from config import IMG_SIZE
 def main():
     args = get_args()
     f = args.fold
-    fold_files_path = '../data_set/5_folds/fold_{}_data.txt'.format(f)
-    data_root = '../data_set/aligned/'
-
-    load_fold_gender(fold_files_path,data_root,f)
+    for k in range(f):
+        fold_files_path = '../data_set/5_folds/fold_{}_data.txt'.format(k)
+        data_root = '../data_set/aligned/'
+        load_fold_gender(fold_files_path,data_root,k)
 
 def get_args():
     parser = argparse.ArgumentParser(description="This script loads images into np array and divide into 5 folds",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--fold",type=str, default=0, help = "choose the fold to load")
+    parser.add_argument("--fold",type=int, default=0, help = "total number of folds")
 
     args = parser.parse_args()
     return args
@@ -31,9 +31,8 @@ def load_fold_gender(path,img_root,fold):
     for i in range(len(lines)):
         lines[i] = lines[i].split('\t')[:5]
 
-    print(len(lines))
     lines = [x for x in lines if x[-1] == 'f' or x[-1] == 'm']
-    print(len(lines))
+    print("total: {}".format(len(lines)))
 
     m_count = 0
     f_count = 0
