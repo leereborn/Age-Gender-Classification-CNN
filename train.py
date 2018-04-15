@@ -7,7 +7,6 @@ from keras.preprocessing.image import ImageDataGenerator
 import pandas as pd
 from keras.callbacks import LearningRateScheduler, ModelCheckpoint, EarlyStopping
 from config import *
-import os
 from utils import mk_dir
 
 def get_args():
