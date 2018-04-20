@@ -21,12 +21,14 @@ def main():
 
     # plot loss function
     input_dir = os.path.dirname(input_path)
+    file_name = os.path.basename(input_path)
+    print(file_name)
     plt.plot(df["loss"], label="loss")
     plt.plot(df["val_loss"], label="val_loss")
     plt.xlabel("number of epochs")
     plt.ylabel("loss")
     plt.legend()
-    plt.savefig(os.path.join(input_dir, "loss.png"))
+    plt.savefig(os.path.join(input_dir, "{}-loss.png".format(file_name)))
     plt.cla()
 
     # plot accuracy
@@ -35,6 +37,6 @@ def main():
     plt.xlabel("number of epochs")
     plt.ylabel("accuracy")
     plt.legend()
-    plt.savefig(os.path.join(input_dir, "accuracy.png"))
+    plt.savefig(os.path.join(input_dir, "{}-accuracy.png".format(file_name)))
 
 main()

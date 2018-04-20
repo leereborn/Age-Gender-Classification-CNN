@@ -24,6 +24,7 @@ def main():
     test_image = image.img_to_array(test_image)
     test_image = np.expand_dims(test_image, axis = 0) # the third dimenssion is for batch
     result = gender_model.predict(test_image)
+    prob = gender_model.predict_proba(test_image)
     #training_set.class_indices
     if result[0][0] == 1:
         prediction = 'f'
@@ -31,3 +32,6 @@ def main():
         prediction = 'm'
 
     print(prediction)
+    print(prob[0][0])
+
+main()

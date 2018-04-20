@@ -8,12 +8,11 @@ import pandas as pd
 from keras.callbacks import LearningRateScheduler, ModelCheckpoint, EarlyStopping
 from config import *
 from utils import mk_dir
+import time
 
 def get_args():
     parser = argparse.ArgumentParser(description="Train the cnn model.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--aug", action="store_true",
-                        help="Use data augmentation if set true")
     parser.add_argument("--validation_fold", type=int, default = 0,
                         help = "choose one of the fold as validation set")
     args = parser.parse_args()
@@ -58,11 +57,15 @@ def main():
 
     cnn = CNN(input_size = IMG_SIZE)
     model = cnn.get_classifier()
-
-    train_datagen = ImageDataGenerator(rescale = 1./255,
+    
+    if IMG_AUG == 1:
+        train_datagen = ImageDataGenerator(rescale = 1./255,
                                    shear_range = 0.2,
                                    zoom_range = 0.2,
                                    horizontal_flip = True)
+    else:
+        train_datagen = ImageDataGenerator(rescale = 1./255)
+        
     test_datagen = ImageDataGenerator(rescale = 1./255)
     training_set = train_datagen.flow(train_x,train_y,batch_size=BATCH_SIZE)
     test_set = test_datagen.flow(test_x,test_y,batch_size=BATCH_SIZE)
@@ -77,6 +80,8 @@ def main():
     hist = model.fit_generator(training_set, steps_per_epoch = len(train_x)//BATCH_SIZE, epochs = NUM_EPOCHS, validation_data = test_set, validation_steps = len(test_set),callbacks=callbacks)
     
     model.save('my_cnn.h5')
-    pd.DataFrame(hist.history).to_hdf("history.h5", "history")
+    mk_dir("history")
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    pd.DataFrame(hist.history).to_hdf("./history/history-{}.h5".format(timestr), "history")
 
 main()

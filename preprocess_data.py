@@ -9,14 +9,14 @@ def main():
     args = get_args()
     f = args.fold
     for k in range(f):
-        fold_files_path = '../data_set/5_folds/fold_{}_data.txt'.format(k)
-        data_root = '../data_set/aligned/'
+        fold_files_path = './data_set/5_folds/fold_{}_data.txt'.format(k)
+        data_root = './data_set/aligned/'
         load_fold_gender(fold_files_path,data_root,k)
 
 def get_args():
     parser = argparse.ArgumentParser(description="This script loads images into np array and divide into 5 folds",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--fold",type=int, default=0, help = "total number of folds")
+    parser.add_argument("--fold",type=int, default=5, help = "total number of folds")
 
     args = parser.parse_args()
     return args

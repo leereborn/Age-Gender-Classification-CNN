@@ -1,4 +1,3 @@
-# This code is imported from the following project: https://github.com/yu4u/age-gender-estimation/
 import os
 import cv2
 import dlib
