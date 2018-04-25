@@ -12,6 +12,8 @@ def get_args():
                         help="path to the trained model file")
     parser.add_argument("--image", type=str, default= None,
                         help="path to the trained model file")
+    parser.add_argument("-p", type=int, default= 0,
+                        help="o is gender and 1 is age")
     args = parser.parse_args()
     return args
 
@@ -19,19 +21,24 @@ def main():
     args = get_args()
     model_path = args.model
     image_path = args.image
+    pred = args.p
 
-    gender_model = load_model(model_path)
+    model = load_model(model_path)
     test_image = image.load_img(image_path, target_size = (IMG_SIZE, IMG_SIZE))
     test_image = image.img_to_array(test_image)
     test_image = np.expand_dims(test_image, axis = 0) # the third dimenssion is for batch
-    result = gender_model.predict(test_image)
-    #training_set.class_indices
-    if result[0][0] == 1:
-        prediction = 'f'
-    else:
-        prediction = 'm'
+    result = model.predict(test_image)
 
-    print(prediction)
-    print(result[0][0])
+    if pred == 0:
+        #training_set.class_indices
+        if result[0][0] == 1:
+            prediction = 'f'
+        else:
+            prediction = 'm'
+
+        print(prediction)
+        print(result[0][0])
+    else:
+        print(result)
 
 main()

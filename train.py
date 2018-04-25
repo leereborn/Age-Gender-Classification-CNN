@@ -102,49 +102,53 @@ def train_age():
         train_x = np.concatenate((train_x,l[i]['image']))
         train_y = np.concatenate((train_y,l[i]['age']))
 
-    #test_y = utils.to_categorical(test_y,num_classes=2)
-    #train_y = utils.to_categorical(test_y,num_classes=2)
     print(test_y)
     for i, value in np.ndenumerate(test_y):
-        if value == '(0, 2)':
+        if value == '(0, 2)   ':
             np.put(test_y,i,0)
-        elif value == '(4, 6)':
+        elif value == '(4, 6)   ':
             np.put(test_y,i,1)
-        elif value == '(8, 12)':
+        elif value == '(8, 12)  ':
             np.put(test_y,i,2)
-        elif value == '(15, 20)':
+        elif value == '(15, 20) ':
             np.put(test_y,i,3)
-        elif value == '(25, 32)':
+        elif value == '(25, 32) ':
             np.put(test_y,i,4)
-        elif value == '(38, 43)':
+        elif value == '(38, 43) ':
             np.put(test_y,i,5)
-        elif value == '(48, 53)':
+        elif value == '(48, 53) ':
             np.put(test_y,i,6)
         elif value == '(60, 100)':
             np.put(test_y,i,7)
         else:
+            print(value)
+            print(len(value))
             raise Exception
     print(test_y)
 
     for i, value in np.ndenumerate(train_y):
-        if value == '(0, 2)':
+        if value == '(0, 2)   ':
             np.put(train_y,i,0)
-        elif value == '(4, 6)':
+        elif value == '(4, 6)   ':
             np.put(train_y,i,1)
-        elif value == '(8, 12)':
+        elif value == '(8, 12)  ':
             np.put(train_y,i,2)
-        elif value == '(15, 20)':
+        elif value == '(15, 20) ':
             np.put(train_y,i,3)
-        elif value == '(25, 32)':
+        elif value == '(25, 32) ':
             np.put(train_y,i,4)
-        elif value == '(38, 43)':
+        elif value == '(38, 43) ':
             np.put(train_y,i,5)
-        elif value == '(48, 53)':
+        elif value == '(48, 53) ':
             np.put(train_y,i,6)
         elif value == '(60, 100)':
             np.put(train_y,i,7)
         else:
+            print(value)
+            print(len(value))
             raise Exception
+    test_y = utils.to_categorical(test_y,num_classes=8)
+    train_y = utils.to_categorical(train_y,num_classes=8)
 
     cnn = AgeCNN(input_size = IMG_SIZE)
     model = cnn.get_classifier()
@@ -175,4 +179,5 @@ def train_age():
     timestr = time.strftime("%Y%m%d-%H%M%S")
     pd.DataFrame(hist.history).to_hdf("./history/age_history-{}.h5".format(timestr), "history")
 
-main()
+#main()
+train_age()
