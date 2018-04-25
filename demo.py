@@ -6,6 +6,7 @@ import argparse
 from contextlib import contextmanager
 from keras.models import load_model
 from keras.preprocessing import image
+from config import IMG_SIZE
 
 def get_args():
     parser = argparse.ArgumentParser(description="This script detects faces from web cam input, "
@@ -58,7 +59,7 @@ def main():
 
     # for face detection
     detector = dlib.get_frontal_face_detector()
-    img_size = 128
+    img_size = IMG_SIZE
     for img in yield_images():
         input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img_h, img_w, _ = np.shape(input_img)
