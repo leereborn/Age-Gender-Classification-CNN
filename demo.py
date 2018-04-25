@@ -7,6 +7,7 @@ from contextlib import contextmanager
 from keras.models import load_model
 from keras.preprocessing import image
 from config import IMG_SIZE
+from predict import get_age
 
 def get_args():
     parser = argparse.ArgumentParser(description="This script detects faces from web cam input, "
@@ -56,6 +57,7 @@ def main():
     weight_file = args.p
 
     model = load_model("my_cnn.h5")
+    age_model = load_model("age_cnn.h5")
 
     # for face detection
     detector = dlib.get_frontal_face_detector()
@@ -80,17 +82,22 @@ def main():
                 faces[i, :, :, :] = cv2.resize(img[yw1:yw2 + 1, xw1:xw2 + 1, :], (img_size, img_size))
 
             # predict ages and genders of the detected faces
-            result = model.predict(faces)
-            if result[0][0] == 1:
-                prediction = 'f'
+            gender_result = model.predict(faces)
+            age_result = age_model.predict(faces)
+            if gender_result[0][0] == 1:
+                gender_prediction = 'female'
             else:
-                prediction = 'm'
+                gender_prediction = 'male'
             
-            print(prediction)
+            age_prediction = get_age(np.argmax(age_result[0]))
+            print(gender_prediction)
+            print(age_prediction)
+
+
 
             # draw results
             for i, d in enumerate(detected):
-                label = prediction
+                label = gender_prediction + " " +  age_prediction
                 draw_label(img, (d.left(), d.top()), label)
 
 
