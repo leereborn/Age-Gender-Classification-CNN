@@ -12,9 +12,9 @@ def get_args():
     parser.add_argument("--model", type=str, default="./my_cnn.h5",
                         help="path to the trained model file")
     parser.add_argument("--image", type=str, default= None,
-                        help="path to the trained model file")
+                        help="path to the image file")
     parser.add_argument("-p", type=int, default= 0,
-                        help="o is gender and 1 is age")
+                        help="0 is gender and 1 is age")
     args = parser.parse_args()
     return args
 
@@ -62,4 +62,5 @@ def get_age(result):
     elif result == 7:
         return '(60, 100)'
 
-#main()
+if __name__ == '__main__':
+    main()
