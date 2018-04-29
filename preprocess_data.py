@@ -68,24 +68,33 @@ def load_fold_age(path,img_root,fold):
             print(i[-2])
             count += 1
     '''
-
-
     lines = [x for x in lines if x[-2] == '(0, 2)' or x[-2] == '(4, 6)' or x[-2] == '(8, 12)' or x[-2] == '(15, 20)' or x[-2] == '(25, 32)' or x[-2] == '(38, 43)' or x[-2] == '(48, 53)' or x[-2] == '(60, 100)']
     print("total: {}".format(len(lines)))
 
-    #m_count = 0
-    #f_count = 0
+    count_arr = [0 for x in range(8)]
+
     for i in tqdm(range(len(lines))):
         age_arr.append(lines[i][-2])
-        #if lines[i][-2] == '(0, 2)':
-        #    m_count += 1
-        #elif lines[i][-1] == 'f':
-        #    f_count += 1
+        if '(0, 2)' in lines[i][-2]:
+            count_arr[0] += 1
+        elif '(4, 6)' in lines[i][-2]:
+            count_arr[1] += 1
+        elif '(8, 12)' in lines[i][-2]:
+            count_arr[2] += 1
+        elif '(15, 20)' in lines[i][-2]:
+            count_arr[3] += 1
+        elif '(25, 32)' in lines[i][-2]:
+            count_arr[4] += 1
+        elif '(38, 43)' in lines[i][-2]:
+            count_arr[5] += 1
+        elif '(48, 53)' in lines[i][-2]:
+            count_arr[6] += 1
+        elif '(60, 100)' in lines[i][-2]:
+            count_arr[7] += 1
         p = img_root + "{}/landmark_aligned_face.{}.{}".format(lines[i][0],lines[i][2],lines[i][1])
         img = cv2.imread(p)
         img_arr.append(cv2.resize(img, (IMG_SIZE, IMG_SIZE)))
-    #print("male: "+ str(m_count))
-    #print("female: "+ str(f_count))
+    print(count_arr)
     output = {"image": np.array(img_arr), "age": np.array(age_arr)}
     out_path = "./age_fold_{}.mat".format(fold)
     scipy.io.savemat(out_path, output)

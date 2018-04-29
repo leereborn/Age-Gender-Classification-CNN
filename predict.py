@@ -62,4 +62,4 @@ def get_age(result):
     elif result == 7:
         return '(60, 100)'
 
-main()
+#main()
