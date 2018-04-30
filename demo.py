@@ -54,9 +54,6 @@ def yield_images():
 
 
 def main():
-    args = get_args()
-    weight_file = args.p
-
     model = load_model("my_cnn.h5")
     age_model = load_model("age_cnn.h5")
 

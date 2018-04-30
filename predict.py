@@ -4,6 +4,12 @@ from keras.preprocessing import image
 import argparse
 from config import IMG_SIZE
 import numpy as np
+from keras.preprocessing.image import ImageDataGenerator
+from scipy.io import loadmat
+from sklearn.metrics import confusion_matrix
+from keras import utils
+from utils import plot_confusion_matrix
+import matplotlib.pyplot as plt
 
 def get_args():
     parser = argparse.ArgumentParser(description="This script detects faces from web cam input, "
@@ -17,6 +23,46 @@ def get_args():
                         help="0 is gender and 1 is age")
     args = parser.parse_args()
     return args
+
+def draw_confusion_matrix():
+    #args = get_args()
+    #model_path = args.model
+    model = load_model('./age_cnn.h5')
+    test_sample = loadmat('./age_fold_0.mat')
+    test_x = test_sample['image']
+    test_y = test_sample['age']
+    print(test_y)
+    for i, value in np.ndenumerate(test_y):
+        if value == '(0, 2)   ':
+            np.put(test_y,i,0)
+        elif value == '(4, 6)   ':
+            np.put(test_y,i,1)
+        elif value == '(8, 12)  ':
+            np.put(test_y,i,2)
+        elif value == '(15, 20) ':
+            np.put(test_y,i,3)
+        elif value == '(25, 32) ':
+            np.put(test_y,i,4)
+        elif value == '(38, 43) ':
+            np.put(test_y,i,5)
+        elif value == '(48, 53) ':
+            np.put(test_y,i,6)
+        elif value == '(60, 100)':
+            np.put(test_y,i,7)
+        else:
+            print(value)
+            print(len(value))
+            raise Exception
+    test_y=test_y.astype(int)
+    print(test_y)
+    rounded_predictions = model.predict_classes(test_x,batch_size=10)
+    print(rounded_predictions)
+    cm = confusion_matrix(test_y,rounded_predictions)
+    print(cm)
+    classes = ['(0,2)','(4, 6)','(8, 12)','(15, 20)','(25, 32)','(38, 43)','(48, 53)','(60, 100)']
+    plt.figure()
+    plot_confusion_matrix(cm,classes,normalize=True, title='Age Confusion matrix')
+    plt.show()
 
 def main():
     args = get_args()
@@ -64,3 +110,4 @@ def get_age(result):
 
 if __name__ == '__main__':
     main()
+    #draw_confusion_matrix()

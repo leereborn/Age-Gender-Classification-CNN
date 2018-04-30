@@ -6,6 +6,7 @@ from keras.layers import Dense
 from keras.layers import Dropout
 from keras import initializers
 from keras.utils import plot_model
+from keras.optimizers import Adam
 
 class CNN():
     def __init__(self, input_size):
@@ -40,7 +41,8 @@ class CNN():
         # Compiling the CNN. Stochastic gradient process is implied here.
         # optimizer: gradient decent
         # loss: if more than two output, need to use categorical_crossentropy
-        self.classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+        adam = Adam(lr = 0.001, decay=0.0)
+        self.classifier.compile(optimizer = adam, loss = 'binary_crossentropy', metrics = ['accuracy'])
 
     def get_classifier(self):
         return self.classifier

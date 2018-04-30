@@ -11,7 +11,7 @@ def main():
     for k in range(f):
         fold_files_path = './data_set/5_folds/fold_{}_data.txt'.format(k)
         data_root = './data_set/aligned/'
-        #load_fold_gender(fold_files_path,data_root,k)
+        load_fold_gender(fold_files_path,data_root,k)
         load_fold_age(fold_files_path,data_root,k)
 
 def get_args():
@@ -61,13 +61,7 @@ def load_fold_age(path,img_root,fold):
     lines = lines[1:]
     for i in range(len(lines)):
         lines[i] = lines[i].split('\t')[:5]
-    '''
-    count = 0
-    for i in lines:
-        if i[-2] != '(0, 2)' and i[-2] != '(4, 6)' and i[-2] != '(8, 12)' and i[-2] != '(15, 20)' and i[-2] != '(25, 32)' and i[-2] != '(38, 43)' and i[-2] != '(48, 53)' and i[-2] != '(60, 100)':
-            print(i[-2])
-            count += 1
-    '''
+
     lines = [x for x in lines if x[-2] == '(0, 2)' or x[-2] == '(4, 6)' or x[-2] == '(8, 12)' or x[-2] == '(15, 20)' or x[-2] == '(25, 32)' or x[-2] == '(38, 43)' or x[-2] == '(48, 53)' or x[-2] == '(60, 100)']
     print("total: {}".format(len(lines)))
 

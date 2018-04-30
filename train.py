@@ -14,14 +14,16 @@ import time
 def get_args():
     parser = argparse.ArgumentParser(description="Train the cnn model.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--validation_fold", type=int, default = 0,
+    parser.add_argument("-v", type=int, default = 0,
                         help = "choose one of the fold as validation set")
+    parser.add_argument("-t", type=int, default = 0,
+                        help = "choose between gender (0) and age (1) to train")
     args = parser.parse_args()
     return args
 
-def main():
+def train_gender():
     args = get_args()
-    validation_fold = args.validation_fold
+    validation_fold = args.v
     test_set = loadmat('./fold_{}.mat'.format(validation_fold))
     test_x = test_set['image']
     test_y = test_set['gender']
@@ -87,7 +89,7 @@ def main():
 
 def train_age():
     args = get_args()
-    validation_fold = args.validation_fold
+    validation_fold = args.v
     test_set = loadmat('./age_fold_{}.mat'.format(validation_fold))
     test_x = test_set['image']
     test_y = test_set['age']
@@ -179,5 +181,10 @@ def train_age():
     timestr = time.strftime("%Y%m%d-%H%M%S")
     pd.DataFrame(hist.history).to_hdf("./history/age_history-{}.h5".format(timestr), "history")
 
-#main()
-train_age()
+if __name__ == '__main__':
+    args = get_args()
+    model = args.t
+    if model == 0:
+        train_gender()
+    else:
+        train_age()
