@@ -1,3 +1,4 @@
+# This script is imported from https://github.com/yu4u/age-gender-estimation
 import os
 import cv2
 import dlib
@@ -89,19 +90,29 @@ def main():
             else:
                 gender_prediction = 'male'
             
-            age_prediction = get_age(np.argmax(age_result[0]))
+            prediction = np.argmax(age_result[0])
+            age_range = get_age(prediction)
             print(gender_prediction)
-            print(age_prediction)
+            print(age_range)
 
-
+            if prediction <= 1:
+                age_display = "baby"
+            elif prediction ==2:
+                age_display = "child"
+            elif prediction ==3:
+                age_display = "youth"
+            elif prediction >=4 and prediction <=6:
+                age_display = "adult"
+            else:
+                age_display = "senior"
 
             # draw results
             for i, d in enumerate(detected):
-                label = gender_prediction + " " +  age_prediction
+                label = gender_prediction + " " +  age_display
                 draw_label(img, (d.left(), d.top()), label)
 
 
-        cv2.imshow("result", img)
+        cv2.imshow("Age and Gender Estimation Demo", img)
         key = cv2.waitKey(30)
 
         if key == 27:
