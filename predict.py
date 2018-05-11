@@ -79,16 +79,17 @@ def main():
     if pred == 0:
         #training_set.class_indices
         if result[0][0] == 1:
-            prediction = 'f'
+            prediction = 'female'
         else:
-            prediction = 'm'
+            prediction = 'male'
 
         print(prediction)
         print(result[0][0])
     else:
         print(result[0])
         print(np.argmax(result[0]))
-        print(get_age(np.argmax(result[0])))     
+        print(get_age(np.argmax(result[0])))
+        print(get_label(np.argmax(result[0])))     
 
 def get_age(result):
     if result == 0:
@@ -107,6 +108,19 @@ def get_age(result):
         return '(48, 53)'
     elif result == 7:
         return '(60, 100)'
+
+def get_label(prediction):
+    if prediction <= 1:
+        age_display = "baby"
+    elif prediction ==2:
+        age_display = "child"
+    elif prediction ==3:
+        age_display = "youth"
+    elif prediction >=4 and prediction <=6:
+        age_display = "adult"
+    else:
+        age_display = "senior"
+    return age_display
 
 if __name__ == '__main__':
     main()
