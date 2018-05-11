@@ -14,14 +14,15 @@ def get_args():
     parser = argparse.ArgumentParser(description="This script detects faces from web cam input, "
                                                  "and estimates age and gender for the detected faces.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("-p", type=str, default="./my_cnn.h5",
-                        help="path to the trained model file")
+    parser.add_argument("--width", type=int, default=1080,
+                        help="Width of the display")
+    parser.add_argument("--height", type=int, default=720,
+                        help="Height of the display")
     args = parser.parse_args()
     return args
 
-
 def draw_label(image, point, label, font=cv2.FONT_HERSHEY_SIMPLEX,
-               font_scale=1, thickness=2):
+               font_scale=2, thickness=2):
     size = cv2.getTextSize(label, font, font_scale, thickness)[0]
     x, y = point
     cv2.rectangle(image, (x, y - size[1]), (x + size[0], y), (255, 0, 0), cv2.FILLED)
@@ -37,11 +38,11 @@ def video_capture(*args, **kwargs):
         cap.release()
 
 
-def yield_images():
+def yield_images(w,h):
     # capture video
     with video_capture(0) as cap:
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 
         while True:
             # get video frame
@@ -54,13 +55,16 @@ def yield_images():
 
 
 def main():
-    model = load_model("my_cnn.h5")
+    args = get_args()
+    WIDTH = args.width
+    HEIGHT = args.height
+    model = load_model("gender_cnn.h5")
     age_model = load_model("age_cnn.h5")
 
     # for face detection
     detector = dlib.get_frontal_face_detector()
     img_size = IMG_SIZE
-    for img in yield_images():
+    for img in yield_images(WIDTH,HEIGHT):
         input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img_h, img_w, _ = np.shape(input_img)
 
@@ -112,6 +116,6 @@ def main():
         cv2.imshow("Age and Gender Estimation Demo", img)
         key = cv2.waitKey(30)
 
-        if key == 27:
+        if key == 27: #Press esc to exit
             break
 main()

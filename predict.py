@@ -15,7 +15,7 @@ def get_args():
     parser = argparse.ArgumentParser(description="This script detects faces from web cam input, "
                                                  "and estimates age and gender for the detected faces.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--model", type=str, default="./my_cnn.h5",
+    parser.add_argument("--model", type=str, default="./gender_cnn.h5",
                         help="path to the trained model file")
     parser.add_argument("--image", type=str, default= None,
                         help="path to the image file")

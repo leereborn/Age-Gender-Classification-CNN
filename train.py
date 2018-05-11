@@ -82,7 +82,7 @@ def train_gender():
                 ]
     hist = model.fit_generator(training_set, steps_per_epoch = len(train_x)//BATCH_SIZE, epochs = NUM_EPOCHS, validation_data = test_set, validation_steps = len(test_set),callbacks=callbacks)
     
-    model.save('my_cnn.h5')
+    model.save('gender_cnn.h5')
     mk_dir("history")
     timestr = time.strftime("%Y%m%d-%H%M%S")
     pd.DataFrame(hist.history).to_hdf("./history/history-{}.h5".format(timestr), "history")
